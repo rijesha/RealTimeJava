@@ -1,0 +1,4 @@
+java -jar serialhandler/build/libs/serialhandler.jar -f -v &
+java -jar realtimefft/build/libs/realtimefft.jar  &
+java -jar realtimeplotter/build/libs/realtimeplotter.jar  &
+

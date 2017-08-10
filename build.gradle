@@ -1,0 +1,22 @@
+allprojects {
+  task hello << { task -> println "I'm $task.project.name" }
+}
+
+subprojects {
+  apply plugin: 'java'
+
+  sourceSets {
+    main {
+        java {
+            srcDirs = ['src/']
+            srcDirs += ['../common/']
+        }
+    }
+}
+
+  dependencies {
+    compile fileTree(dir: '../lib', include: ['*.jar'])
+  }
+}
+
+
