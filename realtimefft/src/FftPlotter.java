@@ -23,7 +23,6 @@ public class FftPlotter implements Runnable, ChangeListener{
 	private long time;
 	private int paddedSize = 32;
 	private int paddedFFTSize;
-	private PrintWriter writer;
 
 	public FftPlotter(String title, String yaxis, String xaxis, int samplingFreq, int fftSize, boolean isComplex, Semaphore calendarLock){
 		bufferLock = new Semaphore(1);
@@ -33,12 +32,6 @@ public class FftPlotter implements Runnable, ChangeListener{
 		graph = new XYGraph(title, yaxis, xaxis, fftSize, 3.90625, this, calendarLock);
 		changeSampleSize(fftSize);
 
-		try{
-
-		    writer = new PrintWriter("new32short", "UTF-8");
-		} catch (Exception e) {
-			System.out.println("Failed to make new File");
-		}
 	}
 	
 	public void changeSampleSize(int fftSize){
@@ -140,7 +133,6 @@ public class FftPlotter implements Runnable, ChangeListener{
 				datastr+= " " + d;
 			}
 
-			writer.println(datastr);
 
 			graph.updateSeriesYaxis(data);
 			try {

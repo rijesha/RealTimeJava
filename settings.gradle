@@ -1,1 +1,1 @@
-include ":serialhandler", ":realtimefft", ":realtimeplotter"
+include ":serialhandler", ":realtimefft", ":realtimeplotter", ":logplayer"

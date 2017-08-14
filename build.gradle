@@ -4,6 +4,10 @@ allprojects {
 
 subprojects {
   apply plugin: 'java'
+  
+  tasks.withType(Jar) {
+        destinationDir = file("../jars")
+    }
 
   sourceSets {
     main {
@@ -18,5 +22,3 @@ subprojects {
     compile fileTree(dir: '../lib', include: ['*.jar'])
   }
 }
-
-

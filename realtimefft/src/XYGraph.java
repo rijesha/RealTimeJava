@@ -33,7 +33,7 @@ public class XYGraph extends JPanel {
 				true, true,	false );
 		XYPlot xyPlot = chart.getXYPlot();
 		ValueAxis rangeAxis = xyPlot.getRangeAxis();
-		rangeAxis.setRange(0.0, 2e7);
+		rangeAxis.setRange(0.0, 2e5);
 		final ChartPanel chartPanel = new ChartPanel(chart);
 		
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -93,5 +93,4 @@ public class XYGraph extends JPanel {
         });
 		add(framesPerSecond);
 	}
-
 }

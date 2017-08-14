@@ -12,19 +12,19 @@ public class RealTimeFFT {
 	private static Semaphore calendarLock = new Semaphore(1);
 	
 	private static FftPlotter realFftPlotter; // = new RealFftPlotter(32);
-	private static FftPlotter complexFftPlotter;
 	
 	private static int SAMPLINGFREQ = 125;
 	private static String regexString = "^DATA(.*)";
+
+	private static int data_index = 2;
 
 	
 	public static void main(String[] args) {
 		parseCLI(args);
 		
 		realFftPlotter = new FftPlotter("Real FFT", "power", "Frequency (Hz)", SAMPLINGFREQ, 4, false, calendarLock);
-		complexFftPlotter = new FftPlotter("Complex FFT", "power", "Frequency (Hz)", SAMPLINGFREQ, 4, true, calendarLock);
 		
-		IvyCallBack ivyCB = new IvyCallBack(realFftPlotter);
+		IvyCallBack ivyCB = new IvyCallBack(realFftPlotter, data_index);
 		try {
 			System.out.println("Making ivyhandler");
 			IvyHandler ivyHandler = new IvyHandler("RealTimeFFtPlotter", ivyCB, regexString);
@@ -49,24 +49,18 @@ public class RealTimeFFT {
 	private static void parseCLI(String[] args) {
 		Options options = new Options();
 
-        Option input = new Option("c", "disable_gui", false, "disable the gui");
-        options.addOption(input);
-
-        Option output = new Option("l", "start_logging", false, "enabling logging on startup");
-        options.addOption(output);
-
-        Option serialport = new Option("d", "serial_device_port", false, "location of serial device port");
-        options.addOption(serialport);
-
-		Option piping = new Option("p", "enable_pipe", false, "Pipe information from System.in");
-        options.addOption(piping);
+		Option index = new Option("i", "data_ind", true, "Which data index from regex" );
+		options.addOption(index);
 
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
         CommandLine cmd;
 
         try {
-            cmd = parser.parse(options, args);
+			cmd = parser.parse(options, args);
+			if (cmd.hasOption("data_ind")){
+				data_index = Integer.parseInt(cmd.getOptionValue("data_ind"));
+			}
         } catch (ParseException e) {
             System.out.println(e.getMessage());
             formatter.printHelp("Real Time FFT Grapher", options);
@@ -106,21 +100,27 @@ public class RealTimeFFT {
 class IvyCallBack implements IvyMessageListener{
 	
 	private FftPlotter plotter;
-	public IvyCallBack(FftPlotter plotter){
+	private int downsample = 0;
+	private int data_index = 1;
+
+	public IvyCallBack(FftPlotter plotter, int data_index){
 		this.plotter = plotter;
-		
+		this.data_index = data_index;		
 			System.out.println("Made ivyCB");
 	}
 
+	
 	public void receive(IvyClient client, String[] args) {
 		String[] splited = args[0].split(" ");
 
 		try{
-			plotter.addDataPoint(Double.parseDouble(splited[1]));
+			plotter.addDataPoint(Double.parseDouble(splited[data_index]));
+		
 		}
-		catch (Exception e){
-
+			catch (Exception e){
 		}
-
+		
+		
 	}
+
 }

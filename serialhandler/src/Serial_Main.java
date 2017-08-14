@@ -5,7 +5,6 @@ import java.nio.ByteOrder;
 
 import org.apache.commons.cli.*;
 
-import java.util.Arrays;
 import java.util.Random;
 import fr.dgac.ivy.*;
 
@@ -19,9 +18,6 @@ public class Serial_Main {
 			
 	private static InputStream in;
 	private static byte[] radarPacket = new byte[8];
-
-	private static byte[] gpsVelPacket = new byte[14];
-	private static byte[] gpsPosPacket = new byte[18];
 
 	private static IvyHandler ivyHandler;
 
@@ -55,7 +51,6 @@ public class Serial_Main {
 			if (fakeDataEnabled) {
 				System.out.println("FAKING DATA");
 				fakeData();
-
 			}				
 		}
 	}
@@ -104,7 +99,6 @@ public class Serial_Main {
 	}
 
 	
-	
 	private static void findHeaderStart() throws IOException, InterruptedException{
 		byte[] one = new byte[1]; 
 		byte[] two = new byte[1];
@@ -124,8 +118,6 @@ public class Serial_Main {
 	private static void startSerialParsing() throws IOException, InterruptedException{
 		int packetSize = 0;
 		String data = "null";
-		ByteBuffer bb = ByteBuffer.allocate(4);
-		byte[] tempVar = new byte[4];
 		
 		while (true){
 			if (in.available() > 1) {
@@ -193,7 +185,7 @@ public class Serial_Main {
 
 			if (loggerStart)
 				logger.writeLine(data);
-
+				
 			if (verbose)
 				System.out.println(data);
 			
